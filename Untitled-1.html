@@ -1,0 +1,702 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Final Sample</title>
+	<style type="text/css"></style>
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge">
+
+	<script>
+	var KIMIPath = './';
+	</script>
+	<script src="./KIMI/KIMI.js"></script>	
+	<script src="./000.menu.js"></script>	
+	<script>
+		$( document ).ready(function() {
+			createKIMI();
+		});
+	
+		function createKIMI(){
+			createMenu();
+			createContainer();
+			createModal();
+		}	
+		function createMenu(){
+			KIMI.Component.create({
+				'id' : 'menuTop',
+				'type' : 'menu',
+				'direction' : 'horizontal',
+				'parentid' : 'hmenu1',
+				'menu' : arrTopMenu,
+				'events' : { 'menuclick' : onTopMenuClick
+					}
+			});	
+			
+			KIMI.Component.create({
+				'id' : 'm2',
+				'type' : 'menu',
+				'direction' : 'vertical',
+				'parentid' : 'vmenu1',
+				'menu' : arrVMenu,
+				'events' : { 'menuclick' : onVMenuClick}
+			});	
+
+	
+		}
+		
+		function createContainer(){
+		KIMI.Component.create({
+				id : 'c1',
+				type : 'container',
+				parentid : 'container1',
+				containerstyle : 'mdi',
+				options : {
+					viewHeight : '650px',
+					portletHeight : '300px'
+				},
+				views : 
+					[{
+					id : 'viewHome',
+					title : 'Home',
+					active : true,					
+					content : {
+						type : 'template',
+						templateid : 'templateHome'
+						} 
+					}]
+					
+			});	
+			var c1 = KIMI.Component.getInstance('c1');
+			c1.bind("view_append_error_exist", function (event){
+				c1.toggle(c1.getCurrentView());
+			});			
+		}		
+		
+		function createModal(){
+			KIMI.Component.create({
+					id : 'modal1',
+					type : 'modal',
+					content : {
+						type : 'string',
+						content : '기본 Modal dialog',
+					},
+					options : {
+						title : { 'title' : '제목' },
+						bottom : {
+							apply  : { 'title' : '적용' },
+							cancel : { 'title' : '취소' },
+						}
+					}				
+				});	
+
+			KIMI.Component.create({
+				id : 'modal2',
+				type : 'modal',
+				externalclicked : 'hide',
+				content : {
+					type : 'template',
+					templateid : 'templateComp6',
+
+				},
+				options : {
+					title : { 'title' : 'HTML template' },
+					bottom : {
+						title : "선택하세요.",
+						apply  : { 'title' : '적용' },
+						cancel : { 'title' : '취소' },
+					}
+				}				
+			});	
+			var arrComp = createComp_Input('_modal');
+			KIMI.Component.create({
+				id : 'modal3',
+				type : 'modal',
+				externalclicked : 'hide',
+				content : {
+					type : 'template',
+					templateid : 'templateComp7',
+					components : arrComp
+				},
+				options : {
+					title : { 'title' : 'HTML & Component template' },
+					bottom : {
+						title : "선택하세요.",
+						apply  : { 'title' : '적용' },
+						cancel : { 'title' : '취소' },
+					}
+				}				
+			});				
+
+			KIMI.Component.create({
+				id : 't1',
+				type : 'transaction',
+				
+			});	
+			var c1 = KIMI.Component.getInstance('t1');
+			c1.bind("transaction_created transaction_shown transaction_hidden", function (event){
+				console.log(event.type);
+			});				
+		}
+		
+		
+		function test(){
+				var menu4 = [
+			{ id:'menu_1'  },
+			{ id:'menu_2', dropdown :   [
+				{ id:'sub21' },
+				{ id:'sub22',label : '둘' },
+				{ id:'sub23'},
+				{ id:'sub24',label : '넷'},					
+				{ id:'sub25'},				
+			]},
+			{ id:'menu_3',label : 'third' }
+		];
+
+		KIMI.Component.getInstance('m2').reload({
+				'menu' : [
+			{ id:'menu_1' ,label : 'first'  },
+			{ id:'menu_2', dropdown :   [
+				{ id:'sub21' },
+				{ id:'sub22',label : '둘' },
+				{ id:'sub23'},
+				{ id:'sub24',label : '넷'},					
+				{ id:'sub25'},				
+			]},
+			{ id:'menu_3',label : 'third' }
+		],
+				'labels' : labels
+		});
+		}
+	</script>	
+<style>
+* {
+  box-sizing: border-box;
+}
+
+/* Create two equal columns that floats next to each other */
+.column {
+	float: left;
+	display: table-cell;
+	height:inherit;
+}
+.column_20{
+  width: 20%;
+}
+.column_80{
+  width: 80%;
+}
+/* Clear floats after the columns */
+.row:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
+	
+</head>
+<body>
+	<div class="row">
+		<div class ="column column_20" style="background-color : #333; height:46px"><h1><span style="color: #ffffff;padding-left: 18px;font-size: 18px;display: block;line-height: 0.7em;">KIMI Samples</span></h1></div>
+		<div class="column column_80" style="background-color : #333; height:46px" id="hmenu1"> </div>
+	</div>
+	<div class="row" style="height:700px">
+		<div class="column column_20">
+			<div id="vmenu1" style="height: 664px"></div>
+		</div>
+		<div class="column column_80" style="background-color:#ffffff;">
+			<div id="container1"></div>
+		</div>
+	</div>
+	
+	<div id="templateHome" style="display:none;height:600px;background-color:white;">
+	    <h1 style="font-weight: bold; text-align:center;">KIMI Components Sample Home</h1>		
+		<ul>
+		<h3 style="margin: 30px">
+			<li>Input, Datepicker 등 컴포넌트 샘플</li>
+			<li>Modal Dialog 등 샘플</li>
+			<li>Portlet / Tab 변환 샘플</li>
+			<li>QCELL 연동 샘플</li></h3>
+		</ul>
+	</div>
+	<div id="templateHome2" style="display:none;background-color:white;">
+	    <h1 style="font-weight: bold; text-align:center;">Tab In Tab Sample</h1>		
+		<ul>
+		<h3 style="margin: 30px">
+			<li>Tab 안에 Tab 을 표현 할 수 있습니다.</li>
+			<li>다양한 화면 표현이 가능합니다.</li>
+
+		</ul>
+	</div>	
+
+	<div id="templateComp" style="display:none;height:600px;background-color:white;">
+		<table class='km_test_table' >
+			<colgroup>
+				<col style="background-color:#eff0f1;width:10%">	
+				<col style="background-color:#eff0f1;width:10%">
+				<col style="width:80%">
+			</colgroup>
+			<tr>
+				<td rowspan="10">input</td>
+				<td>Basic</td>
+				<td><div  id='ca1' ></div></td>
+			</tr>
+			<tr>
+				<td>label</td>	
+				<td>
+					<table style="width:100%;border:1px;">
+						<colgroup>					
+							<col style="width:25%" />
+							<col style="width:25%" />
+							<col style="width:25%" />
+							<col style="width:25%" />					
+						</colgroup>			
+						<tr  style="background-color:#cfefff;">
+							<td>Basic</td>
+							<td>labelposition=right</td>	
+							<td>labelposition=top</td>	
+							<td>labelposition=bottom</td>						
+						</tr>
+						<tr>
+							<td><div  id='ca2' ></div></td>
+							<td><div  id='ca3' ></div></td>	
+							<td><div  id='ca4' ></div></td>	
+							<td><div  id='ca5' ></div></td>					
+						</tr>
+					</table>
+				</td>
+			</tr>		
+
+			<tr>
+				<td>Required</td>	
+				<td><div  id='ca6' ></div></td>
+			</tr>
+			<tr>
+				<td>Placeholder</td>	
+				<td><div  id='ca7' ></div></td>
+			</tr>
+			<tr>
+				<td>Disabled true</td>	
+				<td><div  id='ca8' ></div></td>
+			</tr>	
+			<tr>
+				<td>Readonly true</td>	
+				<td><div  id='ca9' ></div></td>
+			</tr>	
+				
+			<tr>
+				<td>use mask</td>	
+				<td><div  id='ca10' ></div>
+				</td>
+			</tr>	
+			<tr>
+				<td>Tooltip</td>	
+				<td><div  id='ca11' ></div>
+				</td>
+			</tr>		
+			<tr>
+				<td>focus in/out event</td>
+				<td><div  id='ca12' ></div></td>
+			</tr>
+			<tr>
+				<td>valuechanged event</td>
+				<td><div  id='ca13' ></div></td>
+			</tr>
+		</table>
+	</div>	
+	<div  id="templateComp2" style="display:none;height:600px;background-color:white;">
+			<table class='km_test_table' >
+			<colgroup>
+				<col style="background-color:#eff0f1;width:10%">	
+				<col style="background-color:#eff0f1;width:10%">
+				<col style="width:80%">
+			</colgroup>
+			<tr>
+				<td rowspan="11">datepicker</td>
+				<td>Basic</td>
+				<td><div  id='da1' ></div></td>
+			</tr>
+			<tr>
+				<td>label</td>	
+				<td>
+					<table style="width:100%;border:1px;">
+						<colgroup>					
+							<col style="width:25%" />
+							<col style="width:25%" />
+							<col style="width:25%" />
+							<col style="width:25%" />					
+						</colgroup>			
+						<tr  style="background-color:#cfefff;">
+							<td>Basic</td>
+							<td>labelposition=right</td>	
+							<td>labelposition=top</td>	
+							<td>labelposition=bottom</td>						
+						</tr>
+						<tr>
+							<td><div  id='da2' ></div></td>
+							<td><div  id='da3' ></div></td>	
+							<td><div  id='da4' ></div></td>	
+							<td><div  id='da5' ></div></td>					
+						</tr>
+					</table>
+				</td>
+			</tr>	
+			<tr>
+				<td>format</td>	
+				<td>
+					<table style="width:100%;border:1px;">
+						<colgroup>					
+							<col style="width:25%" />
+							<col style="width:25%" />
+							<col style="width:25%" />
+							<col style="width:25%" />					
+						</colgroup>			
+						<tr  style="background-color:#cfefff;">
+							<td>Basic</td>
+							<td>mm/dd/yy</td>	
+							<td>dd-mm-yy</td>	
+							<td>yy-mm-dd</td>						
+						</tr>
+						<tr>
+							<td><div  id='da6' ></div></td>
+							<td><div  id='da7' ></div></td>	
+							<td><div  id='da8' ></div></td>	
+							<td><div  id='da9' ></div></td>					
+						</tr>
+					</table>
+				</td>
+			</tr>		
+			<tr>
+				<td>Required</td>	
+				<td><div  id='da10' ></div></td>
+			</tr>
+			<tr>
+				<td>Placeholder</td>	
+				<td><div  id='da11' ></div></td>
+			</tr>
+			<tr>
+				<td>change format</td>	
+				<td><div  id='da12' ></div>  
+				<select id="format" onchange='changeFormat()'>
+			<option value="yymmdd">Default - yymmdd</option>		
+			<option value="mm/dd/yy">mm/dd/yy</option>
+			<option value="yy-mm-dd">ISO 8601 - yy-mm-dd</option>
+			<option value="d M, y">Short - d M, y</option>
+			<option value="d MM, y">Medium - d MM, y</option>
+			<option value="DD, d MM, yy">Full - DD, d MM, yy</option>
+			<option value="&apos;day&apos; d &apos;of&apos; MM &apos;in the year&apos; yy">With text - 'day' d 'of' MM 'in the year' yy</option>
+		  </select></td>
+			</tr>	
+			<tr>
+				<td>Disabled true</td>	
+				<td><div  id='da13' ></div></td>
+			</tr>	
+			<tr>
+				<td>Readonly true</td>	
+				<td><div  id='da14' ></div></td>
+			</tr>	
+			<tr>
+				<td>Tooltip</td>	
+				<td><div  id='da15' ></div></td>
+			</tr>			
+
+			<tr>
+				<td>focus in/out event</td>
+				<td><div  id='da16' ></div></td>
+			</tr>
+			<tr>
+				<td>valuechanged event</td>
+				<td><div  id='da17' ></div></td>
+			</tr>
+		</table>
+	</div>
+	<div  id="templateComp3" style="display:none;height:600px;background-color:white;">
+		<table class='km_test_table' >
+		<colgroup>
+			<col style="background-color:#eff0f1;width:10%">	
+			<col style="background-color:#eff0f1;width:10%">
+			<col style="width:80%">
+		</colgroup>
+		<tr>
+			<td rowspan="9">Radio or Checkbox</td>
+			<td>Basic</td>
+			<td><div  id='ra1' ></div></td>
+		</tr>
+		<tr>
+			<td>label</td>	
+			<td>
+				<table style="width:100%;border:1px;">
+					<colgroup>					
+						<col style="width:25%" />
+						<col style="width:25%" />
+						<col style="width:25%" />
+						<col style="width:25%" />					
+					</colgroup>			
+					<tr  style="background-color:#cfefff;">
+						<td>Basic</td>
+						<td>labelposition=right</td>	
+						<td>labelposition=top</td>	
+						<td>labelposition=bottom</td>						
+					</tr>
+					<tr>
+						<td><div  id='ra2' ></div></td>
+						<td><div  id='ra3' ></div></td>	
+						<td><div  id='ra4' ></div></td>	
+						<td><div  id='ra5' ></div></td>					
+					</tr>
+				</table>
+			</td>
+		</tr>		
+
+		<tr>
+			<td>Disabled true</td>	
+			<td><div  id='ra6' ></div></td>
+		</tr>	
+		<tr>
+			<td>Checked true</td>	
+			<td><div  id='ra7' ></div></td>
+		</tr>	
+		
+		<tr>
+			<td>valuechanged event</td>
+			<td><div  id='ra8' ></div></td>
+		</tr>
+	</table>	
+	</div>
+	<div  id="templateComp4" style="display:none;height:600px;background-color:white;">
+		<table class='km_test_table' >
+			<colgroup>
+				<col style="background-color:#eff0f1;width:10%">	
+				<col style="background-color:#eff0f1;width:10%">
+				<col style="width:80%">
+			</colgroup>
+			<tr>
+				<td rowspan="9">select</td>
+				<td>Basic</td>
+				<td><div  id='sa1' ></div></td>
+			</tr>
+			<tr>
+				<td>label</td>	
+				<td>
+					<table style="width:100%;border:1px;">
+						<colgroup>					
+							<col style="width:25%" />
+							<col style="width:25%" />
+							<col style="width:25%" />
+							<col style="width:25%" />					
+						</colgroup>			
+						<tr  style="background-color:#cfefff;">
+							<td>Basic</td>
+							<td>labelposition=right</td>	
+							<td>labelposition=top</td>	
+							<td>labelposition=bottom</td>						
+						</tr>
+						<tr>
+							<td><div  id='sa2' ></div></td>
+							<td><div  id='sa3' ></div></td>	
+							<td><div  id='sa4' ></div></td>	
+							<td><div  id='sa5' ></div></td>					
+						</tr>
+					</table>
+				</td>
+			</tr>		
+
+			<tr>
+				<td>Disabled true</td>	
+				<td><div  id='sa6' ></div></td>
+			</tr>	
+			<tr>
+				<td>Selected true</td>	
+				<td><div  id='sa7' ></div></td>
+			</tr>	
+			<tr>
+				<td>Selected api</td>	
+				<td><div  id='sa8' ></div><button onclick="setSelect(3)">setSelect</button>&nbsp;<button onclick="getSelect()">getSelect</button></td>
+			</tr>		
+			<tr>
+				<td>Tooltip api</td>	
+				<td><div  id='sa9' ></div></td>
+			</tr>		
+			<tr>
+				<td>valuechanged event</td>
+				<td><div  id='sa10' ></div></td>
+			</tr>
+		</table>	
+	</div>
+	<div  id="templateComp5" style="display:none;height:600px;background-color:white;">
+		<table class='km_test_table' >
+			<colgroup>
+				<col style="background-color:#eff0f1;width:10%">	
+				<col style="background-color:#eff0f1;width:10%">
+				<col style="width:80%">
+			</colgroup>
+			<tr>
+				<td rowspan="10">button</td>
+				<td>Basic</td>
+				<td><div  id='ba1' ></div></td>
+			</tr>
+			<tr>
+				<td>label</td>	
+				<td>
+					<table style="width:100%;border:1px;">
+						<colgroup>					
+							<col style="width:25%" />
+							<col style="width:25%" />
+							<col style="width:25%" />
+							<col style="width:25%" />					
+						</colgroup>			
+						<tr  style="background-color:#cfefff;">
+							<td>Basic</td>
+							<td>labelposition=right</td>	
+							<td>labelposition=top</td>	
+							<td>labelposition=bottom</td>						
+						</tr>
+						<tr>
+							<td><div  id='ba2' ></div></td>
+							<td><div  id='ba3' ></div></td>	
+							<td><div  id='ba4' ></div></td>	
+							<td><div  id='ba5' ></div></td>					
+						</tr>
+					</table>
+				</td>
+			</tr>		
+			<tr>
+				<td>Flat style</td>	
+				<td><div  id='ba6' ></div></td>
+			</tr>	
+			<tr>
+				<td>Drop down</td>	
+				<td><div  id='ba7' ></div><br><div  id='ba8' ></div></td>
+			</tr>	
+			<tr>
+				<td>Disabled true</td>	
+				<td><div  id='ba9' ></div></td>
+			</tr>	
+			<tr>
+				<td>Tooltip</td>	
+				<td><div  id='ba10' ></div></td>
+			</tr>	
+			<tr>
+				<td>clicked event</td>
+				<td><div  id='ba11' ></div></td>
+			</tr>
+		</table>
+	</div>
+	<div  id="templateComp6" style="display:none;background-color:white;">
+		<form style="border: 3px solid #f1f1f1;">
+		<label for="uname"><b>Username</b></label>
+		<input type="text" placeholder="Enter Username" name="uname" style="  width: 100%;  padding: 12px 20px;  margin: 8px 0;  display: inline-block;  border: 1px solid #ccc;  box-sizing: border-box;" required>
+
+		<label for="psw"><b>Password</b></label>
+		<input type="password" placeholder="Enter Password" name="psw"  style="  width: 100%;  padding: 12px 20px;  margin: 8px 0;  display: inline-block;  border: 1px solid #ccc;  box-sizing: border-box;"  required>
+
+		<button type="submit">Login</button>
+		<label>
+		  <input type="checkbox" checked="checked" name="remember"> Remember me
+		</label>	
+		</form>
+	</div>
+	
+	<div id="templateComp7" style="display:none;background-color:white;">
+		<table class='km_test_table' >
+			<colgroup>
+				<col style="background-color:#eff0f1;width:10%">	
+				<col style="background-color:#eff0f1;width:10%">
+				<col style="width:80%">
+			</colgroup>
+			<tr>
+				<td rowspan="10">input</td>
+				<td>Basic</td>
+				<td><div  id='ca1' ></div></td>
+			</tr>
+			<tr>
+				<td>label</td>	
+				<td>
+					<table style="width:100%;border:1px;">
+						<colgroup>					
+							<col style="width:25%" />
+							<col style="width:25%" />
+							<col style="width:25%" />
+							<col style="width:25%" />					
+						</colgroup>			
+						<tr  style="background-color:#cfefff;">
+							<td>Basic</td>
+							<td>labelposition=right</td>	
+							<td>labelposition=top</td>	
+							<td>labelposition=bottom</td>						
+						</tr>
+						<tr>
+							<td><div  id='ca2' ></div></td>
+							<td><div  id='ca3' ></div></td>	
+							<td><div  id='ca4' ></div></td>	
+							<td><div  id='ca5' ></div></td>					
+						</tr>
+					</table>
+				</td>
+			</tr>		
+
+			<tr>
+				<td>Required</td>	
+				<td><div  id='ca6' ></div></td>
+			</tr>
+			<tr>
+				<td>Placeholder</td>	
+				<td><div  id='ca7' ></div></td>
+			</tr>
+	
+				
+			<tr>
+				<td>use mask</td>	
+				<td><div  id='ca10' ></div>
+				</td>
+			</tr>	
+			<tr>
+				<td>Tooltip</td>	
+				<td><div  id='ca11' ></div>
+				</td>
+			</tr>		
+
+		</table>
+		<div id='tabArea'></div>
+	</div>
+<div style='display:none;' id='temp1'>
+	<table class='km_test_table' >
+	<colgroup>
+		<col style="background-color:#eff0f1;width:10%">	
+		<col style="background-color:#eff0f1;width:10%">
+		<col style="width:80%">
+	</colgroup>
+	<tr>
+		<td rowspan="10">input</td>
+		<td>Basic</td>
+		<td><div  id='inputArea1' ></div></td>
+	</tr>
+	<tr>
+		<td>label</td>	
+		<td>
+			<table style="width:100%;border:1px;">
+				<colgroup>					
+					<col style="width:25%" />
+					<col style="width:25%" />
+					<col style="width:25%" />
+					<col style="width:25%" />					
+				</colgroup>			
+				<tr  style="background-color:#cfefff;">
+					<td>Basic</td>
+					<td>labelposition=right</td>	
+					<td>labelposition=top</td>	
+					<td>labelposition=bottom</td>						
+				</tr>
+				<tr>
+					<td><div  id='inputArea2' ></div></td>
+					<td><div  id='inputArea3' ></div></td>	
+					<td><div  id='inputArea4' ></div></td>	
+					<td><div  id='inputArea5' ></div></td>					
+				</tr>
+			</table>
+		</td>
+	</tr>		
+</table>
+</div>	
+</body>
+</html>
